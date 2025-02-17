@@ -223,3 +223,87 @@ type ONDCSelectResponse struct {
     } `json:"message"`
 }
 
+
+// ONDCInitRequest represents the /init request payload.
+type ONDCInitRequest struct {
+    Context ONDCContext `json:"context"`
+    Message struct {
+        Order struct {
+            Provider struct {
+                ID        string `json:"id"`
+                Locations []struct {
+                    ID string `json:"id"`
+                } `json:"locations"`
+            } `json:"provider"`
+            Items []struct {
+                ID       string `json:"id"`
+                Quantity struct {
+                    Count int `json:"count"`
+                } `json:"quantity"`
+            } `json:"items"`
+            Payment struct {
+                Type string `json:"type"`
+            } `json:"payment"`
+            Fulfillments []struct {
+                ID   string `json:"id"`
+                Type string `json:"type"`
+            } `json:"fulfillments"`
+            Terms struct {
+                StaticTerms   string `json:"static_terms"`
+                EffectiveDate string `json:"effective_date"`
+            } `json:"terms"`
+        } `json:"order"`
+    } `json:"message"`
+}
+
+// ONDCInitResponse represents the /on_init response payload.
+type ONDCInitResponse struct {
+    Context ONDCContext `json:"context"`
+    Message struct {
+        Order struct {
+            Provider struct {
+                ID        string `json:"id"`
+                Locations []struct {
+                    ID string `json:"id"`
+                } `json:"locations"`
+            } `json:"provider"`
+            Items []struct {
+                ID       string `json:"id"`
+                Quantity struct {
+                    Available int `json:"available"`
+                    Maximum   int `json:"maximum"`
+                } `json:"quantity"`
+                Price struct {
+                    Currency string `json:"currency"`
+                    Value    string `json:"value"`
+                } `json:"price"`
+            } `json:"items"`
+            Payment struct {
+                Type   string `json:"type"`
+                Status string `json:"status"`
+            } `json:"payment"`
+            Fulfillments []struct {
+                ID           string `json:"id"`
+                Type         string `json:"type"`
+                ProviderName string `json:"@ondc/org/provider_name"`
+                Tracking     bool   `json:"tracking"`
+                Category     string `json:"@ondc/org/category"`
+                TAT          string `json:"@ondc/org/TAT"`
+                Price        struct {
+                    Currency string `json:"currency"`
+                    Value    string `json:"value"`
+                } `json:"price"`
+                State struct {
+                    Descriptor struct {
+                        Code string `json:"code"`
+                    } `json:"descriptor"`
+                } `json:"state"`
+            } `json:"fulfillments"`
+            Terms struct {
+                StaticTerms   string `json:"static_terms"`
+                EffectiveDate string `json:"effective_date"`
+            } `json:"terms"`
+        } `json:"order"`
+    } `json:"message"`
+}
+

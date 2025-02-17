@@ -173,7 +173,8 @@ You should see:
 ```
 
 ### 3. Send a Test Select Request
-``` curl -X POST http://localhost:9090/select \
+``` 
+curl -X POST http://localhost:9090/select \
   -H "Content-Type: application/json" \
   -d '{
     "context": {
@@ -408,6 +409,134 @@ You should see:
     }
   }
 }
+```
+
+### 4 Send init request
+
+```
+curl -X POST http://localhost:9090/init \
+-H "Content-Type: application/json"   -d '{
+    "context": {
+      "domain": "ONDC:RET11",
+      "action": "init",
+      "core_version": "1.2.0",
+      "bap_id": "buyerNP.com",
+      "bap_uri": "http://localhost:9091",
+      "bpp_id": "sellerNP.com",
+      "bpp_uri": "http://localhost:9090",
+      "transaction_id": "T1",
+      "message_id": "M1",
+      "city": "std:080",
+      "country": "IND",
+      "timestamp": "2025-02-08T05:00:00.000Z",
+      "ttl": "PT30S"
+    },
+    "message": {
+      "order": {
+        "provider": {
+          "id": "P1",
+          "locations": [
+            {"id": "L1"}
+          ]
+        },
+        "items": [
+          {
+            "id": "I1",
+            "quantity": {"count": 1}
+          }
+        ],
+        "payment": {
+          "type": "ON-FULFILLMENT"
+        },
+        "fulfillments": [
+          {
+            "id": "F1",
+            "type": "Delivery"
+          }
+        ],
+        "terms": {
+          "static_terms": "https://github.com/ONDC-Official/NP-Static-Terms/buyerNP_BNP/1.0/tc.pdf",
+          "effective_date": "2023-10-01T00:00:00.000Z"
+        }
+      }
+    }
+  }'
+
+```
+
+### Verify on_init
+
+```
+{
+  "context": {
+    "domain": "ONDC:RET11",
+    "action": "on_init",
+    "core_version": "1.2.0",
+    "bap_id": "buyerNP.com",
+    "bap_uri": "http://localhost:9091",
+    "bpp_id": "sellerNP.com",
+    "bpp_uri": "http://localhost:9090",
+    "transaction_id": "T1",
+    "message_id": "M1",
+    "city": "std:080",
+    "country": "IND",
+    "timestamp": "2025-02-17T05:37:40.356Z"
+  },
+  "message": {
+    "order": {
+      "provider": {
+        "id": "P1",
+        "locations": [
+          {
+            "id": "L1"
+          }
+        ]
+      },
+      "items": [
+        {
+          "id": "I1",
+          "quantity": {
+            "available": 10,
+            "maximum": 5
+          },
+          "price": {
+            "currency": "INR",
+            "value": "269.00"
+          }
+        }
+      ],
+      "payment": {
+        "type": "ON-FULFILLMENT",
+        "status": "Pending"
+      },
+      "fulfillments": [
+        {
+          "id": "F1",
+          "type": "Delivery",
+          "@ondc/org/provider_name": "Seller NP Name",
+          "tracking": false,
+          "@ondc/org/category": "Immediate Delivery",
+          "@ondc/org/TAT": "PT60M",
+          "price": {
+            "currency": "INR",
+            "value": "30.00"
+          },
+          "state": {
+            "descriptor": {
+              "code": "Serviceable"
+            }
+          }
+        }
+      ],
+      "terms": {
+        "static_terms": "https://github.com/ONDC-Official/NP-Static-Terms/buyerNP_BNP/1.0/tc.pdf",
+        "effective_date": "2023-10-01T00:00:00.000Z"
+      }
+    }
+  }
+}
+
+
 ```
 
 ## Troubleshooting

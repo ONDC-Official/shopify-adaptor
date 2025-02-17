@@ -114,3 +114,15 @@ func processSelect(req ONDCSelectRequest) {
         log.Printf("Failed to send on_select for transaction %s: %v", req.Context.TransactionID, err)
     }
 }
+// processInit handles the init request, transforming it into an on_init response.
+func processInit(req ONDCInitRequest) {
+    log.Printf("Processing init for transaction: %s", req.Context.TransactionID)
+
+    // Transform the init request into an ONDC on_init response.
+    initResponse := transformToONDCInitResponse(req)
+
+    // Send on_init response.
+    if err := sendOnInit(req.Context.BapURI, initResponse, req); err != nil {
+        log.Printf("Failed to send on_init for transaction %s: %v", req.Context.TransactionID, err)
+    }
+}

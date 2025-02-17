@@ -14,6 +14,8 @@ func main() {
 	
 	//
 	http.HandleFunc("/select", selectHandler)
+
+	http.HandleFunc("/init", initHandler)
 	// Log server startup
 	log.Println("Server started on :9090")
 	
